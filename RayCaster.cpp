@@ -41,12 +41,15 @@ glm::vec3 RayCaster::castRay(glm::vec3 dir) const
 				continue;
 		
 		glm::vec3 normalDir = prim->getNormal(intersectionPt);
-		glm::vec3 reflectionDir = glm::reflect(lightDir, normalDir);
+		glm::vec3 reflectionDir = glm::reflect(-lightDir, normalDir);
 
 		float LN = glm::clamp(glm::dot(lightDir, normalDir), 0.0f, 1.0f);
-		float RV = pow(glm::clamp(glm::dot(reflectionDir, ray.direction), 0.0f, 1.0f),prim->getMaterial()->shininess);
+		float RV = pow(glm::clamp(glm::dot(reflectionDir, -ray.direction), 0.0f, 1.0f),prim->getMaterial()->shininess);
 
-		ray.color += glm::dot(light.color, prim->getMaterial()->diffuse * LN + prim->getMaterial()->specular * RV);
+		glm::vec3 intensity = prim->getMaterial()->diffuse * LN + prim->getMaterial()->specular * RV;
+		ray.color.x += light.color.x * intensity.x;
+		ray.color.y += light.color.y * intensity.y;
+		ray.color.z += light.color.z * intensity.z;
 	}
 
 	return glm::clamp(ray.color,0.0f,1.0f);

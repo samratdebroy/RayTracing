@@ -38,7 +38,7 @@ int main()
 			glm::vec3 rayColor = rayCaster.castRay(dir);
 
 			float pixelColor[3] = { rayColor.x *255.0f,rayColor.y*255.0f, rayColor.z *255.0f };
-			image.draw_point(i, j, pixelColor);
+			image.draw_point(i,height - j, pixelColor);
 		}
 
 	// Save image

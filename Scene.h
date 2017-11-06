@@ -53,6 +53,7 @@ private:
 	void parseCamera(ifstream& textFile);
 	void parseLight(ifstream& textFile);
 	void parseSphere(ifstream& textFile);
+	void parseTriangle(ifstream& textFile);
 	void parseModel(ifstream& textFile);
 	Material* parseMaterial(ifstream& textFile, glm::vec3& amb, glm::vec3& dif, glm::vec3& spe, float& shi);
 

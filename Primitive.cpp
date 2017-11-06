@@ -65,11 +65,36 @@ Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, Material* mat) :v1(
 
 glm::vec3 Triangle::getNormal(glm::vec3& position)
 {
-	return position;
+	return normal;
 }
 
 bool Triangle::intersect(Ray& ray, float& distance)
 {
+	// Use MOLLER TRUMBORE Alg to check triangle intersection
+	glm::vec3 edge1 = v2 - v1;
+	glm::vec3 edge2 = v3 - v1;
+
+	// Get determinant from Scalar triple product
+	glm::vec3 norm = glm::cross(ray.direction, edge2);
+	float determinant = glm::dot(edge1, norm);
+
+	// If determinant is close to zero, then ray and triangle are almost parallel
+	if (determinant < 0.000001f) return false;
+
+	float invDeterminant = 1 / determinant;
+
+	// Ensure parameters u and v are clamped bw 0 and 1
+	glm::vec3 tVec = ray.origin - v1;
+	float u = glm::dot(tVec, norm) * invDeterminant;
+	if (u < 0 || u > 1) return false;
+
+	glm::vec3 qVec = glm::cross(tVec,edge1);
+	float v = glm::dot(ray.direction, qVec) * invDeterminant;
+	if (v < 0 || u + v > 1) return false;
+
+	// Calculate distance from origin at which intersection happens
+	distance = glm::dot(edge2, qVec) * invDeterminant;
+
 	return true;
 }
 

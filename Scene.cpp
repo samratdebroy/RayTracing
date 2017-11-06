@@ -33,6 +33,8 @@ bool Scene::parseScene(string path)
 				parseSphere(textFile);
 			else if (nextLine == "model")
 				parseModel(textFile);
+			else if (nextLine == "triangle")
+				parseTriangle(textFile);
 		}
 		textFile.close();
 		return true;
@@ -110,6 +112,29 @@ void Scene::parseSphere(ifstream& textFile)
 
 	// Create Sphere and push to primitives vector
 	primitives.push_back(make_shared<Sphere>(pos, radius, tempMat));
+}
+
+void Scene::parseTriangle(ifstream& textFile)
+{
+	string nextLine;
+
+	// Set up Sphere parameters
+	glm::vec3 amb, dif, spe, v1, v2, v3;
+	float shi;
+
+	// vertexes
+	getline(textFile, nextLine);
+	sscanf_s(nextLine.c_str(), "v1: %f %f %f", &v1.x, &v1.y, &v1.z);
+	getline(textFile, nextLine);
+	sscanf_s(nextLine.c_str(), "v2: %f %f %f", &v2.x, &v2.y, &v2.z);
+	getline(textFile, nextLine);
+	sscanf_s(nextLine.c_str(), "v3: %f %f %f", &v3.x, &v3.y, &v3.z);
+
+	// Material
+	Material* tempMat = parseMaterial(textFile, amb, dif, spe, shi);
+
+	// Create Sphere and push to primitives vector
+	primitives.push_back(make_shared<Triangle>(v1,v2,v3, tempMat));
 }
 
 void Scene::parseModel(ifstream& textFile)
