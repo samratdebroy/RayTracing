@@ -12,7 +12,7 @@
 class ObjLoader
 {
 public:
-	static bool loadOBJ(const char * path, std::vector<std::unique_ptr<Primitive> >& primitives, Material* mat);
+	static bool loadOBJ(const char * path, std::vector<std::shared_ptr<Primitive> >& primitives, Material* mat);
 };
 
 #endif

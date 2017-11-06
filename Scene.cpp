@@ -109,7 +109,7 @@ void Scene::parseSphere(ifstream& textFile)
 	Material* tempMat = parseMaterial(textFile, amb, dif, spe, shi);
 
 	// Create Sphere and push to primitives vector
-	primitives.push_back(make_unique<Sphere>(pos, radius, tempMat));
+	primitives.push_back(make_shared<Sphere>(pos, radius, tempMat));
 }
 
 void Scene::parseModel(ifstream& textFile)

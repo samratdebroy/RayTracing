@@ -1,21 +1,16 @@
 #pragma once
 #include "glm/glm.hpp"
-
-
-struct Ray
-{
-	Ray(glm::vec3 ori, glm::vec3 dir) :
-	origin(ori), direction(dir){};
-
-	glm::vec3 origin;
-	glm::vec3 direction;
-	glm::vec3 color = glm::vec3(0.0f,0.0f,0.0f);
-};
+#include "Scene.h"
 
 class RayCaster
 {
 public:
-	RayCaster();
+	RayCaster(Scene* scene);
 	~RayCaster();
+
+	Scene* scene;
+	glm::vec3 castRay(glm::vec3 dir) const;
+	bool rayIntersection(Ray& ray, float& minDist, int & closestPrimitiveIndex) const;
+	bool rayIntersection(Ray& ray, float& minDist) const;
 };
 

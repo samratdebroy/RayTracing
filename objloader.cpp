@@ -8,7 +8,7 @@
 
 #pragma warning(disable:4996)
 
-bool ObjLoader::loadOBJ(const char * path, std::vector<std::unique_ptr<Primitive> >& primitives, Material* mat) {
+bool ObjLoader::loadOBJ(const char * path, std::vector<std::shared_ptr<Primitive> >& primitives, Material* mat) {
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> temp_vertices;
@@ -81,7 +81,7 @@ bool ObjLoader::loadOBJ(const char * path, std::vector<std::unique_ptr<Primitive
 			v1 = temp_vertices[vertexIndex[0] -1];
 			v2 = temp_vertices[vertexIndex[1] -1];
 			v3 = temp_vertices[vertexIndex[2] -1];
-			primitives.push_back(std::make_unique<Triangle>(v1,v2,v3,mat));
+			primitives.push_back(std::make_shared<Triangle>(v1,v2,v3,mat));
 			//////////////////////////////////////////
 
 		}

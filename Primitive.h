@@ -1,6 +1,5 @@
 #pragma once
 #include "glm/glm.hpp"
-#include "RayCaster.h"
 
 struct Material
 {
@@ -14,13 +13,24 @@ struct Material
 	float shininess;	// specular shininess factor
 };
 
+
+struct Ray
+{
+	Ray(glm::vec3 ori, glm::vec3 dir) :
+		origin(ori), direction(dir) {};
+
+	glm::vec3 origin;
+	glm::vec3 direction;
+	glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
+};
+
 class Primitive
 {
 public:
 	virtual ~Primitive() = default;
 	Primitive();
 	virtual glm::vec3 getNormal(glm::vec3& position) =0;
-	virtual bool intersect(Ray& ray, glm::vec3& point, float& distance) =0;
+	virtual bool intersect(Ray& ray, float& distance) =0;
 
 	Material* getMaterial() { return material; }
 	void setMaterial(Material* mat) { material = mat; }
@@ -32,14 +42,14 @@ class Sphere : public Primitive
 {
 public:
 	Sphere(glm::vec3 pos, float rad, Material* mat) :
-		position(pos), radius(rad) {material = mat;};
+		centerPos(pos), radius(rad) {material = mat;};
 	~Sphere() {};
 
 
 	glm::vec3 getNormal(glm::vec3& position) override;
-	bool intersect(Ray& ray, glm::vec3& point, float& distance)  override;
+	bool intersect(Ray& ray, float& distance)  override;
 private:
-	glm::vec3 position;
+	glm::vec3 centerPos;
 	float radius;
 };
 
@@ -50,7 +60,7 @@ public:
 	~Triangle() {};
 
 	glm::vec3 getNormal(glm::vec3& position) override;
-	bool intersect(Ray& ray, glm::vec3& point, float& distance) override;
+	bool intersect(Ray& ray, float& distance) override;
 private:
 	glm::vec3 v1, v2, v3;
 	glm::vec3 normal;

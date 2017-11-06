@@ -36,10 +36,17 @@ class Scene
 public:
 	Scene(string path);
 
+	const Camera& getCamera() const { return camera; }
+	const vector<shared_ptr<Primitive> >&  getPrimitives() const { return primitives; }
+	const vector<Light>&  getLights() const { return lights; }
+
+	static float getFarPlaneDist() { return 9999.0f; }
+	static glm::vec3 getBackgroundColor() { return glm::vec3(0.0f,0.0f,0.0f); }
+
 private:
 	Camera camera;
 	vector<Light> lights;
-	vector<unique_ptr<Primitive> > primitives;
+	vector<shared_ptr<Primitive> > primitives;
 	vector<Material> materials;
 
 	bool parseScene(string path);
