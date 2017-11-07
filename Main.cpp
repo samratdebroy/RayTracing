@@ -11,7 +11,10 @@ using namespace std;
 
 int main()
 {
-	Scene scene("scene2.txt");
+	/* initialize random seed: */
+	srand(time(nullptr));
+
+	Scene scene("scene7.txt");
 	RayCaster rayCaster(&scene);
 
 	Camera cam = scene.getCamera();
@@ -28,19 +31,35 @@ int main()
 		-cam.focalLength + cam.position.z
 	);
 
+	int AALevel = 4;// Anti Aliasing level
+
 	// Raycast through every pixel
-	for(int i = 0; i < width; i++)
-		for(int j = 0; j < height; j++)
+	for (int i = 0; i < width; i++)
+	{
+
+		// Tell user loading progress
+		if (i % (width/10) == 0 && i >0)
+			cout << ((float)i/width)*100 << "% Loaded" << endl;
+
+		for (int j = 0; j < height; j++)
 		{
-			// Create Ray from camera to pixel
-			glm::vec3 pixelPos(screenOrigin.x + i, screenOrigin.y + j, screenOrigin.z);
-			glm::vec3 dir = glm::normalize( pixelPos - cam.position);
-			glm::vec3 rayColor = rayCaster.castRay(dir);
+			glm::vec3 rayColor(0.0f, 0.0f, 0.0f);
+			// shoot n rays per pixel where n = AALevel
+			for (int a = 1; a <= AALevel; a++)
+			{
+				// random values bw 0 and 1 (and ensure 1st point is centered)
+				float xPixelOffset = (a == 1) ? 0.5f : static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+				float yPixelOffset = (a == 1) ? 0.5f : static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
+				// Create Ray from camera to pixel
+				glm::vec3 pixelPos(screenOrigin.x + i + xPixelOffset, screenOrigin.y + j + yPixelOffset, screenOrigin.z);
+				glm::vec3 dir = glm::normalize(pixelPos - cam.position);
+				rayColor += (1.0f / AALevel)*rayCaster.castRay(dir);
+			}
 			float pixelColor[3] = { rayColor.x *255.0f,rayColor.y*255.0f, rayColor.z *255.0f };
-			image.draw_point(i,height - j, pixelColor);
+			image.draw_point(i, height - j, pixelColor);
 		}
-
+	}
 	// Save image
 	image.save("render.bmp");
 

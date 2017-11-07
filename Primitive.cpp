@@ -44,7 +44,7 @@ bool Sphere::intersect(Ray& ray, float& distance)
 	else if (t0 > 0 && t1 < 0)
 		distance = t0;
 	else if (t0 < 0 && t1 > 0)
-		distance = t1;
+		distance = t1; // origin is inside the sphere
 	else
 		return false;	// false if both solutions were negative
 
@@ -95,7 +95,7 @@ bool Triangle::intersect(Ray& ray, float& distance)
 	// Calculate distance from origin at which intersection happens
 	distance = glm::dot(edge2, qVec) * invDeterminant;
 
-	return true;
+	return (distance > 0);
 }
 
 glm::vec3 Plane::getNormal(glm::vec3& position)
