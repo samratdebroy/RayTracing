@@ -79,7 +79,7 @@ bool Triangle::intersect(Ray& ray, float& distance)
 	float determinant = glm::dot(edge1, norm);
 
 	// If determinant is close to zero, then ray and triangle are almost parallel
-	if (determinant < 0.000001f) return false;
+	if (abs(determinant) < 0.000001f) return false;
 
 	float invDeterminant = 1 / determinant;
 
@@ -96,5 +96,22 @@ bool Triangle::intersect(Ray& ray, float& distance)
 	distance = glm::dot(edge2, qVec) * invDeterminant;
 
 	return true;
+}
+
+glm::vec3 Plane::getNormal(glm::vec3& position)
+{
+	return normal;
+}
+
+bool Plane::intersect(Ray& ray, float& distance)
+{
+	float denominator = glm::dot(normal, ray.direction);
+	if(abs(denominator) > 0.00001f)
+	{
+		glm::vec3 rayToPlanePos = position - ray.origin;
+		distance = glm::dot(rayToPlanePos, normal) / denominator;
+		return (distance >= 0);
+	}
+	return false;
 }
 

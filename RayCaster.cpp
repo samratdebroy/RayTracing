@@ -32,8 +32,8 @@ glm::vec3 RayCaster::castRay(glm::vec3 dir) const
 		// Create new ray from intersection point to light source
 		glm::vec3 vecToLight = light.position - intersectionPt;
 		glm::vec3 lightDir = glm::normalize(vecToLight);
-		Ray rayToLight(intersectionPt, lightDir); // TODO check if maybe ray needs to be offset from the intersection point before being cast again
-		float distClosestObj;
+		Ray rayToLight(intersectionPt + lightDir*0.01f, lightDir); // TODO check if maybe ray needs to be offset from the intersection point before being cast again
+		float distClosestObj = Scene::getFarPlaneDist();;
 
 		// If any object lies between the surface point and the light source, don't add light contribution
 		if(rayIntersection(rayToLight,distClosestObj))

@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-	Scene scene("scene1.txt");
+	Scene scene("scene2.txt");
 	RayCaster rayCaster(&scene);
 
 	Camera cam = scene.getCamera();

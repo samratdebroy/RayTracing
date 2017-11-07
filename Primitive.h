@@ -66,3 +66,16 @@ private:
 	glm::vec3 normal;
 };
 
+class Plane : public Primitive
+{
+public:
+	Plane(glm::vec3 pos, glm::vec3 norm, Material* mat):
+	position(pos), normal(norm) {material = mat;};
+	~Plane() {};
+
+	glm::vec3 getNormal(glm::vec3& position) override;
+	bool intersect(Ray& ray, float& distance) override;
+private:
+	glm::vec3 position;
+	glm::vec3 normal;
+};

@@ -35,6 +35,8 @@ bool Scene::parseScene(string path)
 				parseModel(textFile);
 			else if (nextLine == "triangle")
 				parseTriangle(textFile);
+			else if (nextLine == "plane")
+				parsePlane(textFile);
 		}
 		textFile.close();
 		return true;
@@ -135,6 +137,28 @@ void Scene::parseTriangle(ifstream& textFile)
 
 	// Create Sphere and push to primitives vector
 	primitives.push_back(make_shared<Triangle>(v1,v2,v3, tempMat));
+}
+
+void Scene::parsePlane(ifstream& textFile)
+{
+
+	string nextLine;
+
+	// Set up Plane parameters
+	glm::vec3 amb, dif, spe, pos, nor;
+	float shi;
+
+	// Position and Normal
+	getline(textFile, nextLine);
+	sscanf_s(nextLine.c_str(), "nor: %f %f %f", &nor.x, &nor.y, &nor.z);
+	getline(textFile, nextLine);
+	sscanf_s(nextLine.c_str(), "pos: %f %f %f", &pos.x, &pos.y, &pos.z);
+
+	// Material
+	Material* tempMat = parseMaterial(textFile, amb, dif, spe, shi);
+
+	// Create Plane and push to primitives vector
+	primitives.push_back(make_shared<Plane>(pos, nor, tempMat));
 }
 
 void Scene::parseModel(ifstream& textFile)
